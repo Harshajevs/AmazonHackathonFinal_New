@@ -1,0 +1,221 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fire TV Dark Theme */
+
+@layer base {
+  :root {
+    --background: 220 30% 8%;
+    --foreground: 220 10% 95%;
+
+    --card: 220 30% 10%;
+    --card-foreground: 220 10% 95%;
+
+    --popover: 220 30% 8%;
+    --popover-foreground: 220 10% 95%;
+
+    --primary: 28 100% 50%;
+    --primary-foreground: 220 30% 8%;
+
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 220 10% 95%;
+
+    --muted: 220 20% 15%;
+    --muted-foreground: 220 10% 60%;
+
+    --accent: 197 100% 44%;
+    --accent-foreground: 220 30% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 10% 95%;
+
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 28 100% 50%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 220 30% 8%;
+    --sidebar-foreground: 220 10% 95%;
+    --sidebar-primary: 28 100% 50%;
+    --sidebar-primary-foreground: 220 30% 8%;
+    --sidebar-accent: 220 20% 15%;
+    --sidebar-accent-foreground: 220 10% 95%;
+    --sidebar-border: 220 20% 20%;
+    --sidebar-ring: 28 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-fire-darker text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-fire-gray rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-fire-orange rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-fire-blue;
+  }
+}
+
+@layer components {
+  .movie-card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:z-10;
+    filter: brightness(1);
+  }
+
+  .movie-card-hover:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 10px 40px rgba(255, 149, 0, 0.3);
+  }
+
+  .nav-glow {
+    position: relative;
+  }
+
+  .nav-glow::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff9500, transparent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .nav-glow.active::after {
+    transform: scaleX(1);
+  }
+
+  .gradient-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(15, 15, 35, 0.9) 0%,
+      rgba(26, 26, 46, 0.8) 50%,
+      rgba(8, 8, 26, 0.95) 100%
+    );
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #ff9500, #00a8e1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Platform Theme Backgrounds */
+  .netflix-theme {
+    background: linear-gradient(135deg, #000000, #1a1a1a);
+  }
+
+  .prime-theme {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  }
+
+  .hotstar-theme {
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  }
+
+  .aha-theme {
+    background: linear-gradient(135deg, #ea580c, #f97316);
+  }
+
+  /* Enhanced Movie Card Animations */
+  .movie-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .movie-card-hover:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 20px 40px rgba(255, 149, 0, 0.4);
+  }
+
+  /* Smooth Hero Slider */
+  .hero-slider {
+    scroll-snap-type: x mandatory;
+  }
+
+  .hero-slide {
+    scroll-snap-align: start;
+  }
+}
+
+/* Custom animations */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 149, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 149, 0, 0.8);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Dropdown menu styling */
+.dropdown-content {
+  background: rgba(15, 15, 35, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 149, 0, 0.2);
+}
+
+/* Search page styling */
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Categories filter styling */
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.category-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.category-button.active {
+  background: linear-gradient(135deg, #ff9500, #00a8e1);
+  color: white;
+}
+
+.category-button:not(.active) {
+  background: rgba(55, 65, 81, 1);
+  color: rgba(209, 213, 219, 1);
+}
+
+.category-button:not(.active):hover {
+  background: rgba(75, 85, 99, 1);
+  color: white;
+}

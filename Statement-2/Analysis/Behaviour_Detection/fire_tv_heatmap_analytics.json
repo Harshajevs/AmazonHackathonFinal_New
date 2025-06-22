@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-06-21T10:53:23.096787",
+  "total_interactions": 10288,
+  "viewer_type_distribution": {
+    "binge": 6635,
+    "social": 2370,
+    "casual": 1283
+  },
+  "interaction_type_distribution": {
+    "play": 3450,
+    "rewind": 3018,
+    "pause": 2325,
+    "skip_forward": 751,
+    "skip_backward": 744
+  },
+  "behavioral_scores": {
+    "casual": 0.6,
+    "binge": 0.73,
+    "social": 0.64
+  },
+  "peak_interaction_hours": {
+    "10": 640,
+    "22": 623,
+    "4": 595
+  },
+  "engagement_by_content": {
+    "andor_s1": 0.6969630038652679,
+    "friends": 0.678,
+    "good_morning": 0.6901697312588402,
+    "last_of_us": 0.704229797979798,
+    "our_planet": 0.6866180048661801,
+    "squid_game": 0.6990286022665947,
+    "the_bear": 0.6811399832355407
+  }
+}
