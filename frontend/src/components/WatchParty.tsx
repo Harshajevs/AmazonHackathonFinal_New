@@ -5,17 +5,19 @@ import { useApp } from '../contexts/AppContext';
 import AddToQueueModal from './AddToQueueModal';
 
 const WatchParty = () => {
-  const { 
-    roomName, 
-    roomUsers, 
-    movieQueue, 
-    chatMessages, 
-    addChatMessage, 
+  const {
+    roomName,
+    roomUsers,
+    movieQueue,
+    chatMessages,
+    addChatMessage,
     emojiReactions,
     addEmojiReaction,
     removeFromQueue,
     setCurrentPage,
-    setIsInRoom
+    setIsInRoom,
+    roomSession,
+    leaveRoom
   } = useApp();
   
   const [chatInput, setChatInput] = useState('');
@@ -81,8 +83,12 @@ const WatchParty = () => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
     }
-    setIsInRoom(false);
-    setCurrentPage('home');
+    if (roomSession) {
+      leaveRoom();
+    } else {
+      setIsInRoom(false);
+      setCurrentPage('home');
+    }
   };
 
   const handleVideoToggle = () => {
@@ -107,6 +113,15 @@ const WatchParty = () => {
               <ArrowLeft size={20} />
             </button>
             <h1 className="text-xl font-bold text-white">{roomName}</h1>
+            {roomSession && (
+              <button
+                onClick={() => navigator.clipboard?.writeText(roomSession.joinCode)}
+                title="Click to copy — share this code so friends can join"
+                className="px-3 py-1 bg-fire-orange/20 text-fire-orange rounded-lg text-sm font-mono tracking-widest hover:bg-fire-orange/30 transition-colors duration-200"
+              >
+                {roomSession.joinCode}
+              </button>
+            )}
             <div className="flex items-center space-x-2 text-fire-orange">
               <Users size={16} />
               <span className="text-sm">{roomUsers.filter(u => u.isOnline).length} online</span>

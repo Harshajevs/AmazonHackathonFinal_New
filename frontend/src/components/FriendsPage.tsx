@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { UserPlus, Users, Search, MoreHorizontal, Check, X, Play, Plus, Calendar } from 'lucide-react';
 import { Movie } from '../types/Movie';
 import { useApp } from '../contexts/AppContext';
+import { useFriends, FriendDto } from '../api/hooks';
+import { toMovie } from '../lib/api';
 import MovieCard from './MovieCard';
 
 interface Friend {
@@ -34,8 +36,9 @@ const FriendsPage = () => {
   const [activeTab, setActiveTab] = useState<'friends' | 'requests' | 'suggestions' | 'movies'>('friends');
   const [searchTerm, setSearchTerm] = useState('');
   const { setSelectedMovie, setCurrentPage, addToQueue, addToPlaylist, createPlaylist, playlists } = useApp();
+  const friendsQuery = useFriends();
 
-  const friends: Friend[] = [
+  const fallbackFriends: Friend[] = [
     { id: '1', name: 'Manasa', avatar: '👩‍🦰', status: 'online', mutualFriends: 12, currentlyWatching: 'Stranger Things' },
     { id: '2', name: 'Rohith', avatar: '👨‍💼', status: 'watching', mutualFriends: 8, currentlyWatching: 'The Crown' },
     { id: '3', name: 'Maruthi', avatar: '👩‍🎨', status: 'offline', mutualFriends: 15 },
@@ -43,18 +46,18 @@ const FriendsPage = () => {
     { id: '5', name: 'Suhasini', avatar: '👩‍💻', status: 'watching', mutualFriends: 20, currentlyWatching: 'Breaking Bad' }
   ];
 
-  const friendRequests: FriendRequest[] = [
+  const fallbackRequests: FriendRequest[] = [
     { id: '6', name: 'Varshith', avatar: '👨‍🔬', mutualFriends: 3, requestType: 'incoming' },
     { id: '7', name: 'Akash', avatar: '👩‍🏫', mutualFriends: 7, requestType: 'incoming' }
   ];
 
-  const friendSuggestions: FriendRequest[] = [
+  const fallbackSuggestions: FriendRequest[] = [
     { id: '8', name: 'Goutham', avatar: '👨‍🎓', mutualFriends: 5, requestType: 'suggestion' },
     { id: '9', name: 'Viswateja', avatar: '👩‍⚕️', mutualFriends: 9, requestType: 'suggestion' },
     { id: '10', name: 'Prathvik', avatar: '👨‍🎨', mutualFriends: 4, requestType: 'suggestion' }
   ];
 
-  const movieSuggestions: MovieSuggestion[] = [
+  const fallbackMovieSuggestions: MovieSuggestion[] = [
     {
       id: '1',
       movie: {
@@ -109,6 +112,41 @@ const FriendsPage = () => {
       timestamp: new Date('2024-06-18')
     }
   ];
+
+  // Live data from the API when signed in with a social graph;
+  // bundled demo data otherwise (guests have an empty graph).
+  const live = friendsQuery.data;
+  const mapFriend = (f: FriendDto): Friend => ({
+    id: String(f.id),
+    name: f.username,
+    avatar: f.avatar,
+    status: 'online',
+    mutualFriends: f.mutual_friends,
+  });
+  const mapRequest = (f: FriendDto, requestType: 'incoming' | 'suggestion'): FriendRequest => ({
+    id: String(f.id),
+    name: f.username,
+    avatar: f.avatar,
+    mutualFriends: f.mutual_friends,
+    requestType,
+  });
+  const friends: Friend[] = live?.friends.length ? live.friends.map(mapFriend) : fallbackFriends;
+  const friendRequests: FriendRequest[] = live?.requests.length
+    ? live.requests.map((f) => mapRequest(f, 'incoming'))
+    : fallbackRequests;
+  const friendSuggestions: FriendRequest[] = live?.suggestions.length
+    ? live.suggestions.map((f) => mapRequest(f, 'suggestion'))
+    : fallbackSuggestions;
+  const movieSuggestions: MovieSuggestion[] = live?.movie_suggestions.length
+    ? live.movie_suggestions.map((s) => ({
+        id: String(s.id),
+        movie: toMovie(s.movie),
+        suggestedBy: s.from_username,
+        suggestedByAvatar: s.from_avatar,
+        message: s.message || undefined,
+        timestamp: new Date(s.created_at),
+      }))
+    : fallbackMovieSuggestions;
 
   const getStatusColor = (status: string) => {
     switch (status) {

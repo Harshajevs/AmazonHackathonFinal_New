@@ -4,16 +4,31 @@ import { useApp } from '../contexts/AppContext';
 import { ArrowLeft } from 'lucide-react';
 
 const JoinRoomPage = () => {
-  const { setIsInRoom, setCurrentPage, setRoomName } = useApp();
+  const { setIsInRoom, setCurrentPage, setRoomName, joinRoomByCode } = useApp();
   const [roomId, setRoomId] = useState('');
   const [password, setPassword] = useState('');
+  const [joining, setJoining] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleJoinRoom = () => {
-    if (!roomId) return;
-    
-    setRoomName(`Room ${roomId}`);
-    setIsInRoom(true);
-    setCurrentPage('room');
+  const handleJoinRoom = async () => {
+    if (!roomId || joining) return;
+    setJoining(true);
+    setError('');
+    try {
+      await joinRoomByCode(roomId, password);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Could not join the room';
+      if (message.includes('fetch') || message.includes('Failed')) {
+        // Backend unreachable: local demo room.
+        setRoomName(`Room ${roomId}`);
+        setIsInRoom(true);
+        setCurrentPage('room');
+      } else {
+        setError(message);
+      }
+    } finally {
+      setJoining(false);
+    }
   };
 
   const handleBack = () => {
@@ -66,12 +81,13 @@ const JoinRoomPage = () => {
               </button>
               <button
                 onClick={handleJoinRoom}
-                disabled={!roomId}
+                disabled={!roomId || joining}
                 className="flex-1 px-6 py-3 bg-fire-orange hover:bg-fire-blue disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors duration-200"
               >
-                Join
+                {joining ? 'Joining…' : 'Join'}
               </button>
             </div>
+            {error && <p className="text-sm text-red-400">{error}</p>}
           </div>
           
           <div className="mt-8 p-4 bg-fire-dark/50 rounded-lg">

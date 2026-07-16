@@ -5,22 +5,33 @@ import { predefinedMovies, movieData } from '../data/movieData';
 import { Users, UserPlus, Plus } from 'lucide-react';
 
 const CreateRoomPage = () => {
-  const { setIsInRoom, setCurrentPage, setRoomName, roomUsers, setSelectedRoomMovie, addFriendToRoom } = useApp();
+  const { setIsInRoom, setCurrentPage, setRoomName, roomUsers, setSelectedRoomMovie, addFriendToRoom, createRoom } = useApp();
   const [selectedMovie, setSelectedMovie] = useState('');
   const [roomNameInput, setRoomNameInput] = useState('');
   const [roomPassword, setRoomPassword] = useState('');
   const [showAddFriend, setShowAddFriend] = useState(false);
   const [friendName, setFriendName] = useState('');
+  const [creating, setCreating] = useState(false);
+  const [error, setError] = useState('');
 
   const selectedMovieData = movieData.find(m => m.title === selectedMovie);
 
-  const handleCreateRoom = () => {
-    if (!roomNameInput || !selectedMovie) return;
-    
-    setRoomName(roomNameInput);
-    setSelectedRoomMovie(selectedMovieData || null);
-    setIsInRoom(true);
-    setCurrentPage('room');
+  const handleCreateRoom = async () => {
+    if (!roomNameInput || !selectedMovie || creating) return;
+    setCreating(true);
+    setError('');
+    try {
+      await createRoom(roomNameInput, roomPassword, selectedMovieData || null);
+    } catch {
+      // Backend unreachable: fall back to the local single-browser room.
+      setError('Live rooms unavailable — running in local demo mode.');
+      setRoomName(roomNameInput);
+      setSelectedRoomMovie(selectedMovieData || null);
+      setIsInRoom(true);
+      setCurrentPage('room');
+    } finally {
+      setCreating(false);
+    }
   };
 
   const handleAddFriend = () => {
@@ -103,11 +114,12 @@ const CreateRoomPage = () => {
             
             <button
               onClick={handleCreateRoom}
-              disabled={!roomNameInput || !selectedMovie}
+              disabled={!roomNameInput || !selectedMovie || creating}
               className="w-full mt-6 px-6 py-3 bg-fire-orange hover:bg-fire-blue disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors duration-200"
             >
-              Create Room
+              {creating ? 'Creating…' : 'Create Room'}
             </button>
+            {error && <p className="mt-3 text-sm text-yellow-400">{error}</p>}
           </div>
           
           {/* Movie Preview */}
