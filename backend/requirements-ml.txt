@@ -1,0 +1,3 @@
+# Optional ML providers (facial mood via ONNX)
+onnxruntime>=1.19
+opencv-python-headless>=4.10
