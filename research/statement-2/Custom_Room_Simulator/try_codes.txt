@@ -1,0 +1,41 @@
+
+# 1) INITIALISE ROOM  
+python main.py                                   # fresh state, creates AdminGPU[1]
+
+# 2) ADMIN – USERS / ROLES / CHAT     
+python admin.py add  user1  
+python admin.py add  user2
+python admin.py add  user3
+python admin.py add  user4                 
+python admin.py prom user2                
+python admin.py dem  user2                 
+python admin.py kick user2         
+python admin.py chat "hello all!"        
+
+# 3) ADMIN – PLAYLISTS & CURRENT QUEUE (take ID from room_state.json)
+python admin.py plist  "Playlist Name"           # create playlist[1]
+python admin.py padd   <PLID>  "Movie Title"     # add movie to playlist[1]
+python admin.py pshow                            # list all playlists[1]
+python admin.py pshow  <PLID>                    # show movies in playlist[1]
+
+
+# 4) ADMIN – POLLS & GLOBAL TOGGLES   
+python admin.py poll "Question" Opt1 Opt2 ...    # open poll[1]
+python user1.py vote  <POLL_ID>  <option>        # vote in poll[1]
+python admin.py pend <POLL_ID>                   # close poll[1]
+
+
+
+python admin.py glob  chat     on|off            # toggle global chat[1]
+python admin.py glob  reactions on|off           # toggle global reactions[1]
+python admin.py force <user> video|audio|reactions on|off   # force personal setting[1]
+python admin.py share on|off                     # enable / disable screen-share[1]
+
+# 5) USER-SIDE COMMANDS (userX.py)    
+python user1.py chat   "Hello all!"              # user chat[1]
+python user1.py react  1|2|3|4                   # 😂 👍 ❤ 👏[1]
+python user1.py toggle video|audio|reactions|screen_lock on|off   # personal toggle[1]
+python user1.py hand                             # raise hand[1]
+python user1.py queue                            # show current playlist[1]
+python user1.py plist                            # list playlists[1]
+python user1.py plist <PLID>                     # show movies in playlist[1]

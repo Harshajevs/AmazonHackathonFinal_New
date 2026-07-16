@@ -1,0 +1,22 @@
+Room 3318bab6 created by AdminGPU.
+user1 joined the room.
+user2 joined the room.
+user3 joined the room.
+user4 joined the room.
+user2 promoted to co-admin.
+user2 demoted to co-admin.
+user2 left the room.
+[chat] AdminGPU: hello all!
+AdminGPU created playlist 65c0a6b1 (Playlist Name).
+AdminGPU added 'RRR' to playlist 65c0a6b1.
+[chat] AdminGPU: 65c0a6b1 – Playlist Name (1 movies) (current)
+Poll b24b0823: Question (Opt1, Opt2, ...)
+Poll 3792e5e9: Question (Opt1, Opt2, ...)
+Bad vote.
+Bad vote.
+Bad vote.
+Bad vote.
+Bad vote.
+User3 voted for Opt1 (poll 3792e5e9).
+User3 voted for Opt1 (poll 3792e5e9).
+Poll 3792e5e9 closed – Opt1=2, Opt2=0, ...=0 (winner = Opt1)
